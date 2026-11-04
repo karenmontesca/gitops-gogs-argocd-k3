@@ -1,0 +1,19 @@
+agent:
+  key: 'YOUR_AGENT_KEY'
+  downloadKey: 'YOUR_AGENT_KEY'
+  endpointHost: 'YOUR_INSTANA_ENDPOINT'   # copy it from your tenant, e.g. ingress-xxxx-saas.instana.io
+  endpointPort: 443
+  proxyHost: 10.10.10.40
+  proxyPort: 3128
+  proxyProtocol: 'HTTP'
+  proxyUseDNS: true
+  configuration_yaml: |
+    com.instana.plugin.host:
+      tags:
+        - 'lab'
+
+cluster:
+  name: 'instana-lab'
+
+zone:
+  name: 'gogs-instana-lab-zone'

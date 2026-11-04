@@ -1,0 +1,24 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: restart-instana-agent
+  namespace: instana-agent
+  annotations:
+    argocd.argoproj.io/hook: PostSync
+    argocd.argoproj.io/hook-delete-policy: BeforeHookCreation,HookSucceeded
+spec:
+  backoffLimit: 1
+  template:
+    spec:
+      serviceAccountName: argocd-instana-hook
+      restartPolicy: Never
+      containers:
+        - name: kubectl
+          image: rancher/kubectl:v1.30.0
+          args:
+            - rollout
+            - restart
+            - daemonset
+            - instana-agent
+            - -n
+            - instana-agent

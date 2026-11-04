@@ -1,0 +1,30 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: instana-agent
+  namespace: argocd
+spec:
+  project: default
+  sources:
+    - repoURL: https://agents.instana.io/helm
+      chart: instana-agent
+      targetRevision: '*'
+      helm:
+        valueFiles:
+          - $values/values.yaml
+    - repoURL: http://192.168.189.150:3000/root/instana-gitops-lab.git
+      targetRevision: master
+      ref: values
+    - repoURL: http://192.168.189.150:3000/root/instana-gitops-lab.git
+      targetRevision: master
+      path: hooks
+  destination:
+    name: vm-k8s
+    namespace: instana-agent
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - SkipDryRunOnMissingResource=true
